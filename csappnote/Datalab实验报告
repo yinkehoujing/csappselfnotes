@@ -1,0 +1,275 @@
+# Datalab实验报告
+2023302111305 干瑞麟 3.31
+## 一、实验目的
+
+	  本实验目的是加强学生对位级运算的理解及熟练使用的能力。
+	  我认为本次实验能很好地感受到位运算相对于一般运算更加简单快速的魅力所在，同时也能让我对浮点数的存储模型有了更深的理解。
+
+## 二、报告要求
+
+	    本报告要求学生把实验中实现的所有函数逐一进行分析说明，写出实现的依据，也就是推理过程，可以是一个简单的数学证明，也可以是代码分析，根据实现中你的想法不同而异。
+
+## 三、函数分析
+**1. bitXor 函数**
+
+**函数要求：**
+
+函数名 | lab1 - bitXor
+-|-
+参数 | int , int
+功能实现 | x^y
+要求 | x^y using only ~ and &
+
+**实现分析：**
+
+ 利用反演率将位或转化为位与
+
+**函数实现：**
+
+```C
+int bitXor(int x, int y) { 
+	return ~((~(x&(~y))) & (~((~x)&y)) );
+}
+```
+
+**2. copyLSB 函数**
+
+**函数要求：**
+
+函数名 | lab2 - copyLSB
+-|-
+参数 | int
+功能实现 | 0x00000000 or 0xFFFFFFFF
+要求 | set all bits of result to least significant bit of x
+
+**实现分析：**
+
+ 先得到符号位的1位，再减一后取反
+
+**函数实现：**
+
+```C
+int copyLSB(int x) {    
+    return ~((1&X)+(~0));          
+}
+```
+
+**3. isEqual 函数**
+
+**函数要求：**
+
+函数名 | lab3 - isEqual 
+-|-
+参数 | int, int
+功能实现 |  decide whether num1 == num2
+要求 | return 1 if x == y, and 0 otherwise 
+
+**实现分析：**
+通过异或来找出两者是否不同
+
+**函数实现：**
+
+```C
+int isEqual(int x, int y) {
+    return !(x ^ y);
+}
+```
+**4. bitMask 函数**
+
+**函数要求：**
+
+函数名 | lab4 - bitMask
+-|-
+参数 | int, int
+功能实现 |  Generate a mask consisting of all 1's lowbit and highbit
+要求 | Assume 0 <= lowbit <= 31, and 0 <= highbit <= 31. If lowbit > highbit, then mask should be all 0's
+
+**实现分析：**
+
+ 使用移位来切割数据的低位即可
+
+**函数实现：**
+
+```C
+int bitMask(int highbit, int lowbit) {
+    int a=1<<highbit<<1;
+    a=a+(~0);
+    return a&(a^((1<<lowbit)+(~0)));
+
+```
+
+**5. TMax 函数**
+
+**函数要求：**
+
+函数名 | lab5 - TMax
+-|-
+参数 | void
+功能实现 |  find the TMax num.
+要求 | return maximum two's complement integer.
+
+**实现分析：**
+
+ 通过左移先获得Tmin再取反
+
+**函数实现：**
+
+```C
+int tmax(void) {
+  	return ~(1 << 31);
+}
+```
+**6. isNonNegative 函数**
+
+**函数要求：**
+
+函数名 | lab6 - isNonNegative
+-|-
+参数 | int
+功能实现 |  decide whether the data is a non-negative one.
+要求 | return 1 if x >= 0, return 0 otherwise.
+
+**实现分析：**
+
+使用移位来产生高位。注意要返回标准的0或1
+
+**函数实现：**
+
+```C
+int isNonNegative(int x) {
+  	return !(x >> 31) ;
+}
+```
+
+**7. addOK 函数**
+
+**函数要求：**
+
+函数名 | lab7 - addOK
+-|-
+参数 | int， int
+功能实现 |  Determine if can compute x+y without overflow.
+要求 | return 1 or 0 to show whether it might overflow.
+
+**实现分析：**
+
+只有在两数同号时才有可能会发生溢出
+异号可以直接返回1， 否则考虑两数和它们和的符号是否相同
+**函数实现：**
+
+```C
+int addOK(int x, int y) {
+    int a = (x>>31) & 1;
+    int b = (y>>31) & 1; //获得符号位
+    int c = ((x+y)>>31) & 1;
+    return (a^b) | !(a^c);
+}
+```
+
+**8. isLess 函数**
+
+**函数要求：**
+
+函数名 | lab8 - isLess
+-|-
+参数 | int, int
+功能实现 |  determine whether num1 is smallar than num2.
+要求 | if x < y  then return 1, else return 0 .
+
+**实现分析：**
+
+分类分为三种情况：（虽然代码看起来很难看）
+1.a<0, b>=0 此时 c == 1;
+2.a>=0, b<0 此时 d == 0 其它情况为1;
+3.a,b同号 f为a-b结果的符号位;
+汇总结果即可
+**函数实现：**
+
+```C
+int isLess(int x, int y) {
+    int a = (x>>31) & 1;
+    int b = (y>>31) & 1;
+    int c = a & (!b);
+    int d = !((!a) & b);
+    int e = x + (~y + 0x1);
+    int f = (e>>31) & 1;
+    return d & (c | f);
+}
+```
+**9. float_neg 函数**
+
+**函数要求：**
+
+函数名 | lab9 - float_neg
+-|-
+参数 | unsigned
+功能实现 |  determine -f.
+要求 | Return bit-level equivalent of expression -f for floating point argument f. When argument is NaN, return argument.
+
+**实现分析：**
+
+以整数视角去看， 除开符号位，如果大于某个值，便可以确定它转化为浮点数是NaN,即采用位与操作。处理符号位只需要让它与1异或即可
+
+**函数实现：**
+
+```C
+unsigned float_neg(unsigned f) {
+    if((uf & 0x7fffffff) > 0x7f800000) return uf;
+    return (uf ^ 0x80000000);
+    
+}
+```
+
+**10. float_half 函数**
+
+**函数要求：**
+
+函数名 | lab10 - float_half
+-|-
+参数 | unsigned
+功能实现 |  determine 0.5 * f.
+要求 | Return bit-level equivalent of expression 0.5*f for floating point argument f. When argument is NaN, return argument.
+
+**实现分析：**
+首先先把各部分的位级表示提取出来，
+然后还是分类讨论：
+1.NaN 或者 INF
+2.非规格数
+3.从规格数向规格数转化
+4.从规格数到规格数
+最后把结果 位或 起来
+
+**函数实现：**
+
+```C
+unsigned float_half(unsigned uf) {
+    int sign = (uf>>31) & 1;
+    int exp = (uf>>23) & 0xff;
+    int frac = uf & 0x7fffff;
+    int rest = uf & 0x7fffffff;
+    int bias = (frac & 0x3) == 0x3 //只有这种情况下进位舍入
+    if(exp==0xff) return uf;
+    if(!exp){
+	    frac >>= 1;
+	    frac += bias;
+    }
+    else if(exp==1){
+	    rest >>= 1;
+	    rest += bias;
+	    exp = (rest>>23) & 0xff;
+	    frac = rest & 0x7fffff;
+    }
+    else exp -= 1;
+    return (sign<<31) | exp<<23 | frac;
+}
+```
+
+## 四、实验总结
+
+ *1.在通过解决限制条件语句的问题过程中，理解到怎么去用简单的操作去替代运行效率更低的if语句或循环语句*
+*2.了解到许多有用的功能模块。类似于`（x>>31）&1；`简单地说就是取x的高位，它可以很快。再比如说掩码的使用、异或的使用*
+*3.对于特殊情况的限制与特判。尤其是溢出或者是涉及Tmin*
+*4.也对Linux系统、命令行操作有了更多的认识与了解*
+*5.遇到的问题主要是对位运算操作功能的不了解和限制操作符的不习惯，主要是通过积累经验、查阅资料、询问同学来解决。*
+*个人还是非常喜欢这种能自己动手将书本知识运用的过程，虽然可能有些费时间*
+
