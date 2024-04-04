@@ -64,10 +64,9 @@ ceil(x/y) = floor((x+y-1) / y); ceiling,天花板，向上取整
 '0' -> 0x30 
 
 ### Integer C Puzzles
- x &7 == 7 -->  x<<30 小于0
-(-INT_MAX) * (-INT_MAX) = 1
-x< y --> -x > -y
-上面均正确
+ x &7 == 7 -->  x<<30 小于0 正确
+(-INT_MAX) * (-INT_MAX) = 1 正确
+x< y --> -x > -y(x=Tmin 错)
 
 
 ### Floating point（浮点数）
@@ -76,7 +75,8 @@ x< y --> -x > -y
 s(sign) exp(exponent) M->Significand(尾数) M = f + 1
 ***公式: (sign)2^(E-Bias) *M***
 **解释**：（规格化表示时，）尾数隐含以1开头，因为除了0以外的小数，都可以用==科学计数法== 让整数部分为1(2进制)
-![[Pasted image 20240312220229.png]]
+[单精度浮点表示图](https://image.baidu.com/search/detail?ct=503316480&z=0&ipn=d&word=%E6%B5%AE%E7%82%B9%E6%95%B0%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A1%A8%E7%A4%BA%E5%9B%BE&step_word=&hs=0&pn=3&spn=0&di=7308398814308597761&pi=0&rn=1&tn=baiduimagedetail&is=0%2C0&istype=0&ie=utf-8&oe=utf-8&in=&cl=2&lm=-1&st=undefined&cs=619504988%2C48415724&os=3873552962%2C1464828834&simid=3167698371%2C3825188311&adpicid=0&lpn=0&ln=1684&fr=&fmq=1710771818788_R&fm=&ic=undefined&s=undefined&hd=undefined&latest=undefined&copyright=undefined&se=&sme=&tab=0&width=undefined&height=undefined&face=undefined&ist=&jit=&cg=&bdtype=15&oriquery=&objurl=https%3A%2F%2Fgimg2.baidu.com%2Fimage_search%2Fsrc%3Dhttp%3A%2F%2Fupload-images.jianshu.io%2Fupload_images%2F6217760-eec7089fb268036e.jpg%26refer%3Dhttp%3A%2F%2Fupload-images.jianshu.io%26app%3D2002%26size%3Df9999%2C10000%26q%3Da80%26n%3D0%26g%3D0n%26fmt%3Dauto%3Fsec%3D1713363861%26t%3D1b448faf957f195a7ebd23a531a8eb72&fromurl=ippr_z2C%24qAzdH3FAzdH3Fooo_z%26e3B3twgfi7_z%26e3Bv54AzdH3FrAzdH3Fn0c19wj8vv9w&gsm=1e&rpstart=0&rpnum=0&islist=&querylist=&nojc=undefined&dyTabStr=MCwxLDMsMiw0LDYsNSw3LDgsOQ%3D%3D&lid=9477584635302117825)
+
 浮点数没有补码 的概念，采用类似 原码 的概念
 #### 规格化表示
 
@@ -90,6 +90,7 @@ Bias = -1023 同样保留0,1023
 为了表示**0和接近0的小数 和特殊数** 非规格化表示
 exp = 0 ->10^-126 （**Bias = -126**,(-127+1)==不一样！！！==）
 ***这样设计的原因***：实现最大非规格化数与最小规格化数 的 平滑转变，作为对非规格化数不隐含开头1的补偿
+#### 特殊数
 exp全1  无穷数(inf)(frac=0) 和 非法数(NaN,not a number) (frac!=0)
  ==因此，浮点数溢出会得到正无穷或非法数==(可见上图看区分规则)
 
