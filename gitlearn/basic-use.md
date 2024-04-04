@@ -6,9 +6,12 @@
 3. commit : 由许多结构体组成
     父提交信息 (在分支中可能有多个父提交信息）
     author
+   
     message
+   
     snapshot: 记录当前提交的信息,作为历史信息图的一个节点
-4. 所有commit信息实际上只存储对应信息的hash值 即reference to the object
+   
+5. 所有commit信息实际上只存储对应信息的hash值 即reference to the object
 
 ## 本地操作
 1. git help <command> git help add
