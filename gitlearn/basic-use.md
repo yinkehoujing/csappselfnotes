@@ -4,10 +4,10 @@
 1. tree/folder array of bolbs/files
 2. bolbs (文件)
 3. commit : 由许多结构体组成
- 1. 父提交信息 (在分支中可能有多个父提交信息）
- 2. author
- 3. message
- 4. snapshot: 记录当前提交的信息,作为历史信息图的一个节点
+    父提交信息 (在分支中可能有多个父提交信息）
+    author
+    message
+    snapshot: 记录当前提交的信息,作为历史信息图的一个节点
 4. 所有commit信息实际上只存储对应信息的hash值 即reference to the object
 
 ## 本地操作
